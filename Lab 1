@@ -1,0 +1,91 @@
+#Reading file
+def readbanks():
+  ifile = open('bank.csv','r')
+  data = ifile.readlines()
+  ifile.close()
+  return data
+  
+def printheaders():
+  data = readbanks()
+  headers = data[0]
+  headers = headers.split(";")
+  print ("{:<20}".format('Headers:'))
+  for k in headers:
+    print ("{:20}".format(k))
+
+def countmarital():
+  data = readbanks()
+  maritalstat = []
+  for i in range(1,len(data)):
+    da = data[i].split(";")
+    maritalstat.append(da[2])
+  di = {}
+  for i in maritalstat:
+    di[i] = di.get(i,0) + 1
+  
+  print("The count of Marital status of Customers is as given below:")
+
+  print ("{:<20} {:<15}".format('Marital Status','Count'))
+  for k, v in di.items():
+    marit = v
+    print ("{:<20} {:<15}".format(k, marit))
+    
+def countage():
+  data = readbanks()
+  age = []
+  for i in range(1,len(data)):
+    da = data[i].split(";")
+    age.append(da[0])
+
+  di = {}
+  for i in age:
+    di[int(i)] = di.get(int(i),0) + 1
+
+  n = int(input("Enter Basket size "))
+
+  print()
+
+  print("The histogram of age distribution is as follows:")
+  
+  li = [i for i in range(19,88,n)]
+  di2 = {}
+  for i in li:
+    di2[i] = 0
+    for j in range(i,i+10):
+      if(j <= 87):
+        di[j] = di.get(j,0)
+        di2[i] += di[j] 
+
+  ma = max(list(di2.values()))
+  sc = 50/ma
+
+  di3 = {}
+
+  for i in di2:
+    di3[i] = int(sc * di2[i])
+
+  for i in range(len(li)):
+    print(li[i],"-",(li[i]+n),"\t",end = '')
+    for j in range(di3[li[i]]):
+      print('|',end = '')
+    print()
+
+command = 0
+while (command != 4):
+  command = int(input('''Commands:
+  1. Display Headers
+  2. Display count of Marital status
+  3. Dsiplay Histogram of Age distribution of customers
+  4. Exit Program
+  Enter 1/2/3/4
+  '''))
+  print()
+  if(command == 1):
+    printheaders()
+  elif(command == 2):
+    countmarital()
+  elif(command == 3):
+    countage()
+  elif(command != 4):
+    print("Invalid Command")
+  print()
